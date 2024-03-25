@@ -1,0 +1,18 @@
+{% include 'recipe/navbar.html.twig' %}
+
+{% block body %}
+
+<div class="row row-cols-1 d-flex">
+
+               
+               {%for category in categories %}
+                <div class="card flex-4" style="width: 18rem;">
+               <a href="{{ path('recipe.category.test',{id: category.id}) }} ">{{category.category}}</a>
+                <a class="btn" href="{{ path('category.delete', {id:category.id}) }}">Delete</a>
+                </div>
+                {% endfor %}
+             
+
+               <a class="btn" href="{{ path('category.add') }}"> Ajouter une categorie </a>
+</div>
+{% endblock %}
