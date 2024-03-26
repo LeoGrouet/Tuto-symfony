@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Repository\RecipeRepository;
 use App\Entity\Recipe;
 use App\Form\RecipeType;
-use App\Repository\CategoryRepository;
 use App\Validator\Demo;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,6 +51,11 @@ class RecipeController extends AbstractController
         $form = $this->createForm(RecipeType::class, $recipe);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $form->get('thumbnailFile')->getData();
+            $filename = $recipe->getId() . '.' . $file->getClientOriginalExtension();
+            $file->move($this->getParameter("kernel.project_dir") . '/public/images/recipes', $filename);
+            $recipe->setThumbnail($filename);
             $recipe->setUpdatedAt(new \DateTimeImmutable());
             $em->flush();
             $this->addFlash('succes', "c'est good");

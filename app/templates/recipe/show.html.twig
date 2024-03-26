@@ -1,5 +1,9 @@
 {% include 'recipe/navbar.html.twig' %}
 
 {% block body %}
-               <h1>{{recipe.title}}</h1>
+                <h1>{{recipe.title}}</h1>
+                <p>{{recipe.text}}</p>
+                <p><img src="/images/recipes/{{recipe.thumbnail}}" alt=""></p>
+                <p>{{recipe.title}}</p>
+               
 {% endblock %}

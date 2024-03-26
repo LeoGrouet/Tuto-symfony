@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Category;
-use App\Entity\Recipe;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
@@ -24,8 +23,8 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('category/add', name: 'category.add')]
-    public function addRecipe(Request $request, EntityManagerInterface $em)
+    #[Route('category/add', name: 'category.add', methods: ["POST", "GET"])]
+    public function addCategory(Request $request, EntityManagerInterface $em)
     {
 
         // J'instancie un nouveau formulaire via RecipeType qui remplira ma recette 
@@ -34,12 +33,8 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Je crée un nouvelle recette vide
-            $category = new Category();
             $data = $form->getData();
-            $category->setCategory($data["category"]);
-            $category->setSlug($data["slug"]);
-            $category->setCreatedAt(new \DateTimeImmutable());
-            $category->setUpdatedAt(new \DateTimeImmutable());
+            $category = new Category($data["category"], $data["slug"]);
             $em->persist($category);
             $em->flush();
             $this->addFlash('Succes', 'Nouvelle recette ajouter');
